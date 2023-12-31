@@ -31,6 +31,7 @@ public class UserResource {
     @Autowired
     private UserService service;
 
+    // Trazer todos os usuarios
     @GetMapping
     public ResponseEntity<List<User>> findAll() {
         List<User> result = service.findAllUsers();

@@ -27,10 +27,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    // todos os usuarios
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
+    // usuario por email
     public User findUser(String email) {
         List<User> Allusers = new ArrayList<User>();
         Allusers = findAllUsers();
@@ -45,6 +47,7 @@ public class UserService {
         return null;
     }
 
+    // inserir usuario
     public User insert(User obj) {
         try {
             return userRepository.save(obj);
@@ -54,6 +57,7 @@ public class UserService {
         }
     }
 
+    // deletar usuario
     public void deletar(Long id) {
         try {
             if (userRepository.findById(id).isEmpty()) {
@@ -67,10 +71,13 @@ public class UserService {
         }
     }
 
+    // atualizar dados
     public User updatUser(Long id, User obj) {
         try {
             User entity = userRepository.getReferenceById(id);
 
+            // validação manual
+            // https://reflectoring-io.translate.goog/bean-validation-with-spring-boot/?_x_tr_sl=auto&_x_tr_tl=pt&_x_tr_hl=pt-BR
             ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
             Validator validator = factory.getValidator();
             Set<ConstraintViolation<User>> violations = validator.validate(obj);
