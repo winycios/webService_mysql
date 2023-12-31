@@ -2,16 +2,24 @@ package com.winycteste.demo.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.winycteste.demo.entities.User;
 import com.winycteste.demo.repository.UserRepository;
+import com.winycteste.demo.services.exceptions.DatabaseException;
+import com.winycteste.demo.services.exceptions.ResourceNotFoundException;
 import com.winycteste.demo.services.exceptions.ValidationExc;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 @Service
 public class UserService {
@@ -44,5 +52,44 @@ public class UserService {
             throw new ValidationExc(
                     e.getConstraintViolations().stream().map(ConstraintViolation::getPropertyPath).toList().toString());
         }
+    }
+
+    public void deletar(Long id) {
+        try {
+            if (userRepository.findById(id).isEmpty()) {
+                throw new ResourceNotFoundException(id);
+            }
+
+            userRepository.deleteById(id);
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    public User updatUser(Long id, User obj) {
+        try {
+            User entity = userRepository.getReferenceById(id);
+
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
+            Set<ConstraintViolation<User>> violations = validator.validate(obj);
+            if (!violations.isEmpty()) {
+                throw new ValidationExc(
+                        violations.stream().map(ConstraintViolation::getMessageTemplate).toList().toString());
+
+            }
+
+            updateData(entity, obj);
+            return userRepository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    private void updateData(User entity, User obj) {
+        entity.setUsername(obj.getUsername());
+        entity.setEmail(obj.getEmail());
+        entity.setPassword(obj.getPassword());
     }
 }

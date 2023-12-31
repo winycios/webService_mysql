@@ -2,7 +2,7 @@ package com.winycteste.demo.resources;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winycteste.demo.entities.config.Payment;
+import com.winycteste.demo.entities.Payment;
 import com.winycteste.demo.services.PaymentService;
 
 import jakarta.annotation.Resource;

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winycteste.demo.entities.config.Payment;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -26,6 +26,7 @@ public class User implements Serializable {
     @NotBlank(message = "Name is mandatory")
     private String username;
 
+    @Email(message = "Format email incorrect")
     @NotBlank(message = "email is mandatory")
     private String email;
 

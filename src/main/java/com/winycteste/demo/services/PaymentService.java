@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winycteste.demo.entities.config.Payment;
+import com.winycteste.demo.entities.Payment;
 import com.winycteste.demo.repository.PaymentRepository;
 import com.winycteste.demo.services.exceptions.ResourceNotFoundException;
 

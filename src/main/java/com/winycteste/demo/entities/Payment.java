@@ -1,10 +1,7 @@
-package com.winycteste.demo.entities.config;
+package com.winycteste.demo.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-
-
-import com.winycteste.demo.entities.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
