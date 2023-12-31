@@ -10,11 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.winycteste.demo.entities.User;
 import com.winycteste.demo.repository.UserRepository;
+import com.winycteste.demo.services.exceptions.AuthException;
 import com.winycteste.demo.services.exceptions.DatabaseException;
 import com.winycteste.demo.services.exceptions.ResourceNotFoundException;
 import com.winycteste.demo.services.exceptions.ValidationExc;
 
 import jakarta.persistence.EntityNotFoundException;
+
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
@@ -47,9 +49,27 @@ public class UserService {
         return null;
     }
 
+    // Autenticar usuario
+    public User auth(String email, String password) {
+        List<User> user = userRepository.findAll().stream()
+                .filter(c -> c.getEmail().equals(email) && c.getPassword().equals(password)).toList();
+
+        if (!user.isEmpty()) {
+            for (User auth : user) {
+                return new User(auth.getId(), auth.getUsername(), auth.getEmail(), auth.getPassword());
+            }
+        }
+        throw new AuthException("User not found");
+    }
+
     // inserir usuario
     public User insert(User obj) {
         try {
+            User exists = findUser(obj.getEmail());
+            if (exists != null) {
+                throw new AuthException("User already exists");
+            }
+
             return userRepository.save(obj);
         } catch (ConstraintViolationException e) {
             throw new ValidationExc(
@@ -99,4 +119,5 @@ public class UserService {
         entity.setEmail(obj.getEmail());
         entity.setPassword(obj.getPassword());
     }
+
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.winycteste.demo.services.exceptions.AuthException;
 import com.winycteste.demo.services.exceptions.DatabaseException;
 import com.winycteste.demo.services.exceptions.ResourceNotFoundException;
 import com.winycteste.demo.services.exceptions.ValidationExc;
@@ -40,6 +41,16 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> resourceNotFound(DatabaseException e, HttpServletRequest request) {
 
         String error = "Database error";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+                request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<StandardError> resourceNotFound(AuthException e, HttpServletRequest request) {
+
+        String error = "Incorrect credentials";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
                 request.getRequestURI());

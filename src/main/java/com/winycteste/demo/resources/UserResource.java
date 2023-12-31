@@ -5,7 +5,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.winycteste.demo.entities.User;
 import com.winycteste.demo.services.UserService;
-
 import com.winycteste.demo.services.exceptions.ResourceNotFoundException;
 
 import jakarta.annotation.Resource;
@@ -47,6 +46,14 @@ public class UserResource {
             return ResponseEntity.ok().body(result);
         }
         throw new ResourceNotFoundException(email);
+    }
+
+    // Autenticar usuario
+    @GetMapping(value = "auth/{email}/{password}")
+    public ResponseEntity<User> buscarUser(@PathVariable String email, @PathVariable String password) {
+        User result = service.auth(email, password);
+
+        return ResponseEntity.ok().body(result);
     }
 
     // Cadastrar usuario
