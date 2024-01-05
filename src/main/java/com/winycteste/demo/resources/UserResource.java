@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/users")
 @Resource
 public class UserResource {
@@ -37,8 +39,16 @@ public class UserResource {
         return ResponseEntity.ok().body(result);
     }
 
+    // Buscar por ID
+    @GetMapping(value = "id/{id}")
+    public ResponseEntity<User> buscarUserId(@PathVariable Long id) {
+        User result = service.findbyId(id);
+
+        return ResponseEntity.ok().body(result);
+    }
+
     // Buscar por Usuario
-    @GetMapping(value = "login/{email}")
+    @GetMapping(value = "email/{email}")
     public ResponseEntity<User> buscarUser(@PathVariable String email) {
         User result = service.findUser(email);
 
@@ -60,8 +70,8 @@ public class UserResource {
     @PostMapping
     public ResponseEntity<User> insert(@RequestBody User obj) {
         obj = service.insert(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("users/login/{email}")
-                .buildAndExpand(obj.getEmail()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("users/id/{id}")
+                .buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(obj);
     }
 

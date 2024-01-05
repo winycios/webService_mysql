@@ -2,6 +2,7 @@ package com.winycteste.demo.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +119,12 @@ public class UserService {
         entity.setUsername(obj.getUsername());
         entity.setEmail(obj.getEmail());
         entity.setPassword(obj.getPassword());
+    }
+
+    /* find by id */
+    public User findbyId(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
 }

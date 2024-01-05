@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/pay")
+@CrossOrigin("*")
 @Resource
 public class PaymentResource {
 
@@ -38,7 +40,7 @@ public class PaymentResource {
     // Trazer pagamento por cliente
     @GetMapping(value = "client/{id}")
     public ResponseEntity<List<Payment>> byClientID(@PathVariable Long id) {
-        
+
         List<Payment> result = service.findAllPaymentsClient(id);
         return ResponseEntity.ok().body(result);
     }
@@ -47,13 +49,12 @@ public class PaymentResource {
     @PostMapping
     public ResponseEntity<Payment> insert(@RequestBody Payment payment) {
         payment = service.insert(payment);
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("payment/client/{id}")
-                .buildAndExpand(payment.getUser().getEmail()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("pay/client/{id}")
+                .buildAndExpand(payment.getUser().getId()).toUri();
         return ResponseEntity.created(uri).body(payment);
     }
 
-
-      // Deletar
+    // Deletar
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.deletar(id);

@@ -3,7 +3,6 @@ package com.winycteste.demo.entities;
 import java.io.Serializable;
 import java.time.Instant;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +18,7 @@ public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
     private Instant day;
 

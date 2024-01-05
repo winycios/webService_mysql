@@ -32,9 +32,9 @@ public class Polulation implements CommandLineRunner {
         userRepository.saveAll(Arrays.asList(u1, u2, u3, u4));
 
         Payment p1 = new Payment(null, Instant.parse("2019-06-20T19:53:07Z"), u1);
-        Payment p2 = new Payment(null, Instant.parse("2019-07-21T03:42:10Z"), u2);
-        Payment p3 = new Payment(null, Instant.parse("2019-07-22T15:21:22Z"), u3);
-        Payment p4 = new Payment(null, Instant.parse("2019-07-22T15:21:22Z"), u1);
+        Payment p2 = new Payment(null, Instant.parse("2014-07-21T03:42:10Z"), u2);
+        Payment p3 = new Payment(null, Instant.parse("2018-07-22T15:21:22Z"), u3);
+        Payment p4 = new Payment(null, Instant.parse("2011-07-22T15:21:22Z"), u1);
 
         paymentRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
 
